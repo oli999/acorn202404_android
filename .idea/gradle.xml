@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Kotlin_study" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/step01layout" />
+            <option value="$PROJECT_DIR$/step02event" />
+            <option value="$PROJECT_DIR$/step02event2" />
+            <option value="$PROJECT_DIR$/step03listview" />
+            <option value="$PROJECT_DIR$/step04webview" />
+            <option value="$PROJECT_DIR$/step05httprequest" />
+            <option value="$PROJECT_DIR$/step05httprequest2" />
+            <option value="$PROJECT_DIR$/step06coroutine" />
+            <option value="$PROJECT_DIR$/step07customlistview" />
+          </set>
+        </option>
+        <option name="resolveExternalAnnotations" value="false" />
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
