@@ -48,7 +48,7 @@ class GalleryAdapter(
         // UI 에 데이터 출력 해서
         textWriter.text=dto.writer
         textCaption.text=dto.caption
-        textRegdate.text=dto.writer
+        textRegdate.text=dto.regdate
         //ImageView 에는 Glide 를 이용해서 이미지 출력하기
         Glide.with(context) //해당 context(액티비티) 의 생명주기 내에서 동작
             .load(dto.imagePath) // "http://xxx:8888/upload/images/xxxx"

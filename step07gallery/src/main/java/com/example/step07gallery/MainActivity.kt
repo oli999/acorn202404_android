@@ -1,6 +1,10 @@
 package com.example.step07gallery
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.ListView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -11,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnItemClickListener{
     //필요한 필드 정의하기
     val list = mutableListOf<GalleryDto>()
     lateinit var adapter: GalleryAdapter
@@ -28,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         listView.adapter=adapter
         // refresh() 함수 호출해서 API 서버로 부터 데이터 받아오기
         refresh()
+        // ListView 에 아이템클릭 리스너 등록
+        listView.setOnItemClickListener(this)
     }
 
     fun refresh(){
@@ -58,6 +64,29 @@ class MainActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
 
         }
+    }
+    // ListView 의  cell 을 클릭하면 호출되는 메소드
+    override fun onItemClick(p0: AdapterView<*>?, view: View?, index: Int, id: Long) {
+        /*
+            view  =>  클릭한 cell 의 View 객체
+            index =>  클릭한 cell 의 인덱스
+            id => 클릭한 cell 의  primary key
+         */
+
+        // 액티비티를 이동하기 위해서는 Intent 객체가 필요하다
+        /*
+            [ 클래스 type 을 만드는 방법 ]
+            java =>  클래스명.class
+            kotlin => 클래스명::class.java
+         */
+
+        // Intent 객체의 생성자에 첫번째 매개변수에는 Context type,
+        // 두번째 매개변수에는 이동을 액티비티의 class type 을 전달해야 한다.
+        val intent = Intent(this, DetailActivity::class.java)
+        // Intent 객체 "num" 이라는 key 값으로 번호(pk) 를 담는다.
+        intent.putExtra("num", id)
+        // startActivity() 메소드를 이용해서 액티비티 이동하기
+        startActivity(intent)
     }
 }
 
