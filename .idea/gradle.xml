@@ -22,6 +22,7 @@
             <option value="$PROJECT_DIR$/step07customlistview" />
             <option value="$PROJECT_DIR$/step07gallery" />
             <option value="$PROJECT_DIR$/step08fragment" />
+            <option value="$PROJECT_DIR$/step09customview" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
