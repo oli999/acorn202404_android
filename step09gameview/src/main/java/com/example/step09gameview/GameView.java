@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GameView extends View {
     //배경이미지 정보를 담을 Bitmap 객체
@@ -41,6 +42,15 @@ public class GameView extends View {
     int speedMissile;
     //Missile 객체를 저장할 List
     List<Missile> missList=new ArrayList<>();
+
+    //적기 이미지를 저장할 배열(2차원 배열)
+    Bitmap[][] enemyImgs=new Bitmap[2][2];
+    //Enemy 객체를 저장할 List
+    List<Enemy> enemyList=new ArrayList<>();
+    //적기의 x 좌표를 저장할 배열
+    int[] enemyX=new int[5];
+    //랜덤한 숫자를 얻어낼 Random 객체
+    Random ran=new Random();
 
 
     public GameView(Context context) {
@@ -108,6 +118,48 @@ public class GameView extends View {
         missImgs[1]=missImg2;
         missImgs[2]=missImg3;
 
+        //적기 이미지 로딩
+        Bitmap enemyImg1=BitmapFactory
+                .decodeResource(getResources(), R.drawable.silver1);
+        Bitmap enemyImg2=BitmapFactory
+                .decodeResource(getResources(), R.drawable.silver2);
+        Bitmap enemyImg3=BitmapFactory
+                .decodeResource(getResources(), R.drawable.gold1);
+        Bitmap enemyImg4=BitmapFactory
+                .decodeResource(getResources(), R.drawable.gold2);
+
+        //적기 이미지 사이즈 조절
+        enemyImg1=Bitmap.createScaledBitmap(enemyImg1,
+                unitSize, unitSize, false);
+        enemyImg2=Bitmap.createScaledBitmap(enemyImg2,
+                unitSize, unitSize, false);
+        enemyImg3=Bitmap.createScaledBitmap(enemyImg3,
+                unitSize, unitSize, false);
+        enemyImg4=Bitmap.createScaledBitmap(enemyImg4,
+                unitSize, unitSize, false);
+        //적기 이미지 배열에 저장
+        enemyImgs[0][0]=enemyImg1; //0행 0열 silver1
+        enemyImgs[0][1]=enemyImg2; //0행 1열 silver2
+        enemyImgs[1][0]=enemyImg3; //1행 0열 gold1
+        enemyImgs[1][1]=enemyImg4; //1행 1열 gold2
+        //적기의 x 좌표를 구해서 배열에 저장한다.
+        for(int i=0; i<5; i++){
+            enemyX[i] = i*unitSize + unitSize/2;
+        }
+
+        //테스트로 적기 5개를 만들어서 적기 List 에 넣어보기
+        for(int i=0; i<5; i++){
+            //적기 객체를 만들어서
+            Enemy e = new Enemy();
+            e.x = enemyX[i]; //미리 계산한 x 좌표를 5개의 적기에 순서대로 넣어준다
+            e.y = unitSize/2;
+            e.type = ran.nextInt(2);
+            e.energy = 100;
+            e.imageIndex = 0;
+            //적기 List 에 추가하기
+            enemyList.add(e);
+        }
+
         //Handler 객체에 메세지를 보내서 지속적으로 View 가 다시 그려지도록 한다.
         handler.sendEmptyMessageDelayed(0, 10);
     }
@@ -117,10 +169,43 @@ public class GameView extends View {
         //배경 이미지 그리기
         canvas.drawBitmap(backImg, 0, back1Y, null);
         canvas.drawBitmap(backImg, 0, back2Y, null);
+
         //반복문 미사일 그리기
         for(Missile tmp:missList){
             canvas.drawBitmap(missImgs[0], tmp.x-missSize/2, tmp.y-missSize/2, null);
         }
+        //반복문 돌면서 적기 그리기
+        for(Enemy tmp:enemyList){
+            canvas.drawBitmap(enemyImgs[tmp.type][tmp.imageIndex],
+                    tmp.x-unitSize/2, tmp.y-unitSize/2, null);
+        }
+        //적기 움직이기
+        for(Enemy tmp:enemyList){
+            tmp.y += speedMissile/10;
+            //만일 아래쪽으로 화면을 벗어 났다면
+            if(tmp.y > height+unitSize/2){
+                tmp.isDead=true;//배열에서 제거 될수 있도록 표시한다.
+            }
+        }
+        //적기 체크해서 배열에서 삭제할 적기는 제거 하기
+        for(int i=enemyList.size()-1; i>=0; i--){
+            Enemy tmp=enemyList.get(i);
+            if(tmp.isDead){
+                enemyList.remove(i);
+            }
+        }
+
+        if(count%10 == 0){
+            //적기 애니메이션
+            for(Enemy tmp:enemyList){
+                //모든 적기의 이미지 인덱스를 1 증가 시킨다.
+                tmp.imageIndex++;
+                if(tmp.imageIndex==2){//만일 존재하지 않는 인덱스라면
+                    tmp.imageIndex=0; //다시 처음으로 돌리기
+                }
+            }
+        }
+
 
         //드레곤 이미지 그리기
         canvas.drawBitmap(dragonImgs[dragonIndex], dragonX-unitSize/2, dragonY-unitSize/2, null);
